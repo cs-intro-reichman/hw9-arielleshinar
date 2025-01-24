@@ -307,27 +307,12 @@ public class LinkedList {
 	 * A textual representation of this list, for debugging.
 	 */
 	public String toString() {
-		  // creat an empty string to build the list's string representation
-		  StringBuilder sb = new StringBuilder();
-    
-		  // Check if the list is empty
-		  if (first == null) {
-			  return "[]";  // Return an empty list representation
-		  }
-		  
-		  sb.append("[");  // Open the list with a square bracket
-		  Node current = first;  // Start from the first node
-		  // Traverse through the list
-		  while (current != null) {
-			sb.append(current.block);  // Add the block of the current node to the string
-			if (current.next != null) {
-				sb.append(", ");  // Add a comma and space if it's not the last node
-			}
-			current = current.next;  // Move to the next node
-		}
-		
-		sb.append("]");  // Close the list with a square bracket
-		  
-		return sb.toString();  // Return the string representation of the list
+		 ListIterator itr = this.iterator();
+		 String str = "";
+		 while(itr.hasNext()){
+			str+= "(" + itr.current.block.baseAddress + " , " + itr.current.block.length + ") ";
+			itr.next();
+		 }
+		 return str;
 	}
 }

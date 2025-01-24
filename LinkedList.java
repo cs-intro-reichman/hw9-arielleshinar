@@ -260,7 +260,7 @@ public class LinkedList {
 	 */
 	public void remove(int index) {
 		if (index < 0 || index >= size) {  // Fix the index bound check
-			throw new IllegalArgumentException("index must be between 0 and size-1");
+			throw new IllegalArgumentException("index must be between 0 and size");
 		}
 	
 		if (index == 0) {  // If the node to remove is the first node
@@ -299,7 +299,7 @@ public class LinkedList {
 	public void remove(MemoryBlock block) {
 		int index = indexOf(block);
 		if (index == -1) {
-			throw new IllegalArgumentException("Memory block not found in the list");
+			throw new IllegalArgumentException("index must be between 0 and size");
 		}
 		remove(index);  // Call the existing remove by index method
 	}

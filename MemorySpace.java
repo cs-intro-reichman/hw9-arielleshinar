@@ -112,8 +112,31 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		//// Write your code here
-	}
+		 // Find the block in the allocatedList with the given base address
+		 Node currentNode = allocatedList.getFirst(); 
+		 Node blockToFree = null;
+	 
+		 // Traverse the allocated list to find the block
+		 while (currentNode != null) {
+			 if (currentNode.block.baseAddress == address) {
+				 blockToFree = currentNode;  // Found the block
+				 break;
+			 }
+			 currentNode = currentNode.next;  // Move to the next node in the list
+		 }
+	 
+		 // If no block with the given address was found in allocatedList, return (or handle error)
+		 if (blockToFree == null) {
+			 return;  // Or you can throw an exception if this is an error case
+		 }
+		 // Remove the block from the allocatedList
+		 allocatedList.remove(blockToFree.block);
+
+		 //  Add the block to the freeList
+		 freeList.addLast(blockToFree.block);  
+	 
+		}
+	
 	
 	/**
 	 * A textual representation of the free list and the allocated list of this memory space, 

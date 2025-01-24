@@ -259,17 +259,19 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public void remove(int index) {
-		if (index < 0 || index > size) {
-			throw new IllegalArgumentException(
-					"index must be between 0 and size");
+		if (index < 0 || index >= size) {  // Fix the index bound check
+			throw new IllegalArgumentException("index must be between 0 and size-1");
 		}
-
-		 if (index==0){
+	
+		if (index == 0) {  // If the node to remove is the first node
 			first = first.next;  // Set the first node to the next node
+			if (first == null) {  // If the list becomes empty
+				last = null;  // Set last to null if the list is now empty
+			}
 			size--;
 			return;
-		 }
-
+		}
+	
 		// Remove from the middle or end
 		Node previousNode = first;
 		for (int i = 0; i < index - 1; i++) {
@@ -280,12 +282,11 @@ public class LinkedList {
 		previousNode.next = previousNode.next.next;
 	
 		// Handle last node case
-		if (index == size - 1) {
-			previousNode.next = null;  // Set the new last node's next to null
+		if (index == size - 1) {  // If we removed the last node
+			last = previousNode;  // Update last to the previous node
 		}
 	
 		size--;
-	
 	}
 
 	/**
@@ -296,9 +297,12 @@ public class LinkedList {
 	 *         if the given memory block is not in this list
 	 */
 	public void remove(MemoryBlock block) {
-		remove(indexOf(block));
-		return;
-	}	
+		int index = indexOf(block);
+		if (index == -1) {
+			throw new IllegalArgumentException("Memory block not found in the list");
+		}
+		remove(index);  // Call the existing remove by index method
+	}
 
 	/**
 	 * Returns an iterator over this list, starting with the first element.

@@ -139,18 +139,18 @@ public class LinkedList {
 	public void addLast(MemoryBlock block) {
 		// Create the new node to be inserted
 		Node lastNode = new Node(block);
-		if (size == 0){
+
+		if (size == 0) {
+			// If the list is empty, both first and last point to the new node
 			first = lastNode;
 			last = lastNode;
+		} else {
+			// Otherwise, append the new node to the last node's next pointer
+			last.next = lastNode;
+			last = lastNode;  // Update the last pointer to point to the new last node
 		}
-		else{
-		Node currentNode = first;
-			while (currentNode.next != null) {  // Traverse to the last node
-				currentNode = currentNode.next;
-			}
-			currentNode.next = lastNode;  // Set the last node's next to the new node
-		}
-		size++;
+	
+		size++; 
 		} 
 		
 		
@@ -229,27 +229,26 @@ public class LinkedList {
 		  // If the node to remove is the first node
 		  if (first.equals(node)) {
 			first = first.next;  // Set the first node to the next node
-			if (first == null){
-				last = null;
+			if (first == null) {
+				last = null;  // If the list becomes empty, set last to null
 			}
 			size--;
+			return;  // Exit after removing the first node
 		}
 	
 		// Traverse the list to find the node before the one we want to remove
 		Node currentNode = first;
 		while (currentNode != null && currentNode.next != null) {
-			currentNode = currentNode.next;	
-		}	
-		if (currentNode != null && currentNode.next == null) {
-				currentNode.next = node.next;  // Skip the node to remove
-				if (node.equals(last)){
-					last = currentNode;
+			if (currentNode.next.equals(node)) {
+				currentNode.next = currentNode.next.next;  // Skip the node to remove
+				if (currentNode.next == null) {
+					last = currentNode;  // If we've removed the last node, update the last pointer
 				}
 				size--;
-				
+				return;  // Exit after removing the node
 			}
-		
-		
+			currentNode = currentNode.next;  // Move to the next node
+		}
 	}
 
 	/**

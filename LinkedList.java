@@ -89,7 +89,7 @@ public class LinkedList {
 	 */
 	public void add(int index, MemoryBlock block) {
 		 // Validate the index
-		 if (index < 0 || index >= size) {
+		 if (index < 0 || index > size) {
 			throw new IllegalArgumentException("Index must be between 0 and size");
 		}
 	

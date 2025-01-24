@@ -152,6 +152,17 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		//// Write your code here
+		//// checks if there are adresses that are lined up
+		Node currentNode = freeList.getFirst();
+		for (int i = 0; i < freeList.getSize(); i++){
+		while(currentNode.next != null){
+			if (currentNode.block.baseAddress + currentNode.block.length == currentNode.next.block.baseAddress){
+				currentNode.block.length += currentNode.next.block.length;
+				freeList.remove(currentNode.next); 
+			}
+			currentNode.next = currentNode.next.next;
+		}
+		currentNode = currentNode.next;
+	}
 	}
 }

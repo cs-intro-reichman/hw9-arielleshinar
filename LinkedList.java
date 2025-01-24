@@ -54,9 +54,19 @@ public class LinkedList {
 			throw new IllegalArgumentException(
 					"index must be between 0 and size");
 		}
-		//// Replace the following statement with your code
-		return null;
-	}
+
+		 // Start from the first node
+		 Node currentNode = first;
+
+		 // Traverse the list to the node at the given index
+		 for (int i = 0; i < index; i++) {
+			 currentNode = currentNode.next; // Move to the next node
+		 }
+	 
+		 // Return the node at the specified index
+		 return currentNode;
+	 }
+	
 	
 	/**
 	 * Creates a new Node object that points to the given memory block, 
@@ -78,7 +88,40 @@ public class LinkedList {
 	 *         if index is negative or greater than the list's size
 	 */
 	public void add(int index, MemoryBlock block) {
-		//// Write your code here
+		 // Validate the index
+		 if (index < 0 || index > size) {
+			throw new IllegalArgumentException("Index must be between 0 and size");
+		}
+	
+		// Create the new node to be inserted
+		Node addNode = new Node(block);
+	
+		// If the index is 0, insert at the beginning
+		if (index == 0) {
+			addNode.next = first;  // Point the new node's next to the current first node
+			first = addNode;       // Make the new node the first node in the list
+		} 
+		// If the index is size, insert at the end (tail)
+		else if (index == size) {
+			Node currentNode = first;
+			while (currentNode.next != null) {  // Traverse to the last node
+				currentNode = currentNode.next;
+			}
+			currentNode.next = addNode;  // Set the last node's next to the new node
+		} 
+
+		// If the index is somwhere in the middle of the list, insert it there
+		// Traverse the list to the node at the given index
+		else{
+		Node currentNode = first;
+
+		for (int i = 0; i < index-1; i++) {
+			
+			currentNode = currentNode.next; // Move to the next node
+		}
+		currentNode.next = addNode;  // Set the node at thats index is one before 'index''s next to the new node
+		}
+		size++;
 	}
 
 	/**
@@ -89,8 +132,19 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addLast(MemoryBlock block) {
-		//// Write your code here
-	}
+		// Create the new node to be inserted
+		Node lastNode = new Node(block);
+
+		Node currentNode = first;
+			while (currentNode.next != null) {  // Traverse to the last node
+				currentNode = currentNode.next;
+			}
+			currentNode.next = lastNode;  // Set the last node's next to the new node
+			size++;
+		} 
+		
+		
+	
 	
 	/**
 	 * Creates a new node that points to the given memory block, and adds it 
@@ -100,8 +154,15 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addFirst(MemoryBlock block) {
-		//// Write your code here
-	}
+	
+			// Create the new node to be inserted
+			Node firstNode = new Node(block);
+			
+				firstNode.next = first;  // Point the new node's next to the current first node
+				first = firstNode;       // Make the new node the first node in the list
+				size++;
+			}
+	
 
 	/**
 	 * Gets the memory block located at the given index in this list.
@@ -113,8 +174,28 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public MemoryBlock getBlock(int index) {
-		//// Replace the following statement with your code
-		return null;
+		
+		if (index < 0 || index > size) {
+			throw new IllegalArgumentException(
+					"index must be between 0 and size");
+		}
+
+		//// create a node to check
+		Node checkNode = first;
+
+		if (index ==0){
+			return checkNode.block;
+		}
+		else if(index == size){
+			checkNode = getLast();
+			return checkNode.block;
+		}
+		
+		for (int i = 0; i < index; i++){
+			checkNode = checkNode.next;
+		}
+
+		return checkNode.block;	
 	}	
 
 	/**
@@ -125,7 +206,16 @@ public class LinkedList {
 	 * @return the index of the block, or -1 if the block is not in this list
 	 */
 	public int indexOf(MemoryBlock block) {
-		//// Replace the following statement with your code
+		//// goes over the list and check if there is a memory block that is equal to block
+		//// create a node to check
+		Node checkNode = first;
+		for(int i = 0; i< size; i++){
+			
+			if (checkNode.block.equals(block)){
+				return i;
+			}
+			checkNode = checkNode.next;
+		}
 		return -1;
 	}
 
@@ -136,7 +226,24 @@ public class LinkedList {
 	 *        the node that will be removed from this list
 	 */
 	public void remove(Node node) {
-		//// Write your code here
+		
+		  // If the node to remove is the first node
+		  if (first.block.equals(node.block)) {
+			first = first.next;  // Set the first node to the next node
+			size--;
+			return;
+		}
+	
+		// Traverse the list to find the node before the one we want to remove
+		Node checkNode = first;
+		while (checkNode != null && checkNode.next != null) {
+			if (checkNode.next.block.equals(node.block)) {
+				checkNode.next = checkNode.next.next;  // Skip the node to remove
+				size--;
+				return;
+			}
+			checkNode = checkNode.next;  // Move to the next node
+		}
 	}
 
 	/**
@@ -147,7 +254,33 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public void remove(int index) {
-		//// Write your code here
+		if (index < 0 || index > size) {
+			throw new IllegalArgumentException(
+					"index must be between 0 and size");
+		}
+
+		 if (index==0){
+			first = first.next;  // Set the first node to the next node
+			size--;
+			return;
+		 }
+
+		// Remove from the middle or end
+		Node previousNode = first;
+		for (int i = 0; i < index - 1; i++) {
+			previousNode = previousNode.next;
+		}
+	
+		// Remove the node by skipping it
+		previousNode.next = previousNode.next.next;
+	
+		// Handle last node case
+		if (index == size - 1) {
+			previousNode.next = null;  // Set the new last node's next to null
+		}
+	
+		size--;
+	
 	}
 
 	/**
@@ -158,13 +291,15 @@ public class LinkedList {
 	 *         if the given memory block is not in this list
 	 */
 	public void remove(MemoryBlock block) {
-		//// Write your code here
+		remove(indexOf(block));
+		return;
 	}	
 
 	/**
 	 * Returns an iterator over this list, starting with the first element.
 	 */
 	public ListIterator iterator(){
+
 		return new ListIterator(first);
 	}
 	
@@ -172,7 +307,27 @@ public class LinkedList {
 	 * A textual representation of this list, for debugging.
 	 */
 	public String toString() {
-		//// Replace the following statement with your code
-		return "";
+		  // creat an empty string to build the list's string representation
+		  StringBuilder sb = new StringBuilder();
+    
+		  // Check if the list is empty
+		  if (first == null) {
+			  return "[]";  // Return an empty list representation
+		  }
+		  
+		  sb.append("[");  // Open the list with a square bracket
+		  Node current = first;  // Start from the first node
+		  // Traverse through the list
+		  while (current != null) {
+			sb.append(current.block);  // Add the block of the current node to the string
+			if (current.next != null) {
+				sb.append(", ");  // Add a comma and space if it's not the last node
+			}
+			current = current.next;  // Move to the next node
+		}
+		
+		sb.append("]");  // Close the list with a square bracket
+		  
+		return sb.toString();  // Return the string representation of the list
 	}
 }

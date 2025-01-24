@@ -50,7 +50,7 @@ public class LinkedList {
 	 * @return the node at the given index
 	 */		
 	public Node getNode(int index) {
-		if (index < 0 || index > size) {
+		if (index < 0 || index >= size) {
 			throw new IllegalArgumentException(
 					"index must be between 0 and size");
 		}
@@ -89,7 +89,7 @@ public class LinkedList {
 	 */
 	public void add(int index, MemoryBlock block) {
 		 // Validate the index
-		 if (index < 0 || index > size) {
+		 if (index < 0 || index >= size) {
 			throw new IllegalArgumentException("Index must be between 0 and size");
 		}
 	
@@ -100,14 +100,18 @@ public class LinkedList {
 		if (index == 0) {
 			addNode.next = first;  // Point the new node's next to the current first node
 			first = addNode;       // Make the new node the first node in the list
+			{
+				if (size ==0){
+					last = addNode;
+				}
+			}
 		} 
 		// If the index is size, insert at the end (tail)
 		else if (index == size) {
-			Node currentNode = first;
-			while (currentNode.next != null) {  // Traverse to the last node
-				currentNode = currentNode.next;
-			}
-			currentNode.next = addNode;  // Set the last node's next to the new node
+			 if(last != null){
+				last.next = addNode;
+			 }
+			 last = addNode;
 		} 
 
 		// If the index is somwhere in the middle of the list, insert it there
@@ -119,8 +123,9 @@ public class LinkedList {
 			
 			currentNode = currentNode.next; // Move to the next node
 		}
-		currentNode.next = addNode;  // Set the node at thats index is one before 'index''s next to the new node
-		}
+		addNode.next = currentNode.next;  // Set the node at thats index is one before 'index''s next to the new node
+		currentNode.next = addNode;
+	}
 		size++;
 	}
 

@@ -112,7 +112,7 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		 // Find the block in the allocatedList with the given base address
+		/*  // Find the block in the allocatedList with the given base address
 		 Node currentNode = allocatedList.getFirst(); 
 		 Node blockToFree = null;
 	 
@@ -135,7 +135,31 @@ public class MemorySpace {
 		 //  Add the block to the freeList
 		 freeList.addLast(blockToFree.block);  
 	 
+		}*/
+		// Find the block in the allocatedList with the given base address
+		Node currentNode = allocatedList.getFirst();  // Ensure this method exists in your list
+		Node blockToFree = null;
+	
+		// Traverse the allocated list to find the block
+		while (currentNode != null) {
+			if (currentNode.block.baseAddress == address) {
+				blockToFree = currentNode;  // Found the block
+				break;
+			}
+			currentNode = currentNode.next;  // Move to the next node in the list
 		}
+	
+		// If no block with the given address was found in allocatedList, return (or handle error)
+		if (blockToFree == null) {
+			throw new IllegalArgumentException("Memory block not found in the allocated list");
+		}
+	
+		// Remove the block from the allocatedList
+		allocatedList.remove(blockToFree.block);  // Ensure this remove method works as expected
+	
+		// Add the block to the freeList
+		freeList.addLast(blockToFree.block);  // Ensure addLast method is defined in freeList
+	}
 	
 	
 	/**
@@ -152,17 +176,24 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		//// checks if there are adresses that are lined up
-		Node currentNode = freeList.getFirst();
-		for (int i = 0; i < freeList.getSize(); i++){
-		while(currentNode.next != null){
-			if (currentNode.block.baseAddress + currentNode.block.length == currentNode.next.block.baseAddress){
-				currentNode.block.length += currentNode.next.block.length;
-				freeList.remove(currentNode.next); 
-			}
-			currentNode.next = currentNode.next.next;
-		}
-		currentNode = currentNode.next;
+		// Start from the first node in the free list
+   		 Node currentNode = freeList.getFirst();
+
+   		// Iterate over the free list
+   		while (currentNode != null && currentNode.next != null) {
+        // Check if the current block and the next block are adjacent
+        if (currentNode.block.baseAddress + currentNode.block.length == currentNode.next.block.baseAddress) {
+            // Merge the blocks
+            currentNode.block.length += currentNode.next.block.length;
+
+            // Remove the next node from the free list (since it has been merged)
+            freeList.remove(currentNode.next.block);
+
+           
+        } else {
+            // Move to the next node if no merging occurred
+            currentNode = currentNode.next;
+        }
 	}
 	}
 }

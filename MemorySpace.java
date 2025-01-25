@@ -113,7 +113,7 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		
-	if (freeList.getSize() == 0) {  
+	if (allocatedList.getSize() == 0) {  
 			System.out.println("hi");
 		}
   // Find the block in the allocatedList with the given base address

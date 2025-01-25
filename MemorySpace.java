@@ -167,23 +167,40 @@ public class MemorySpace {
 	 */
 	public void defrag() {
 		// Start from the first node in the free list
-   		 Node currentNode = freeList.getFirst();
+   		Node currentNode = freeList.getFirst();
+		boolean flag =true;
+		boolean flag2 =true;
+	while(currentNode != null){
+		Node runner = freeList.getFirst();
+		while (runner != null){
+			
+			 // Check if the current block and the next block are adjacent
+			 if (currentNode.block.baseAddress + currentNode.block.length == runner.block.baseAddress) {
+				// Merge the blocks
+				currentNode.block.length += runner.block.length;
+	
+				// Remove the next node from the free list (since it has been merged)
+				Node newRemove = runner;
+				runner = runner.next;
+				freeList.remove(newRemove.block);
+				flag = false;
+				flag2 = false;
 
-   		// Iterate over the free list
-   		while (currentNode != null && currentNode.next != null) {
-        // Check if the current block and the next block are adjacent
-        if (currentNode.block.baseAddress + currentNode.block.length == currentNode.next.block.baseAddress) {
-            // Merge the blocks
-            currentNode.block.length += currentNode.next.block.length;
-
-            // Remove the next node from the free list (since it has been merged)
-            freeList.remove(currentNode.next.block);
-
-           
-        } else {
-            // Move to the next node if no merging occurred
-            currentNode = currentNode.next;
-        }
+	
+			}
+			if (flag2){
+				runner = runner.next;
+			}
+			flag2 = true;
+			
+		}
+		if(flag){
+			currentNode = currentNode.next;
+		}
+		flag = true;
+//	String beforeDefrag = "(0 , 20) (40 , 20) (60 , 40)\n(20 , 20)\n";
+//	assertString(beforeDefrag, memory.toString(), "Before defrag");
+   		
 	}
 	}
 }

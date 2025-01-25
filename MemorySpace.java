@@ -137,8 +137,9 @@ public class MemorySpace {
 	 
 		}*/
 		// Find the block in the allocatedList with the given base address
-		Node currentNode = allocatedList.getFirst();  // Ensure this method exists in your list
+		Node currentNode = allocatedList.getFirst();  
 		Node blockToFree = null;
+
 	
 		// Traverse the allocated list to find the block
 		while (currentNode != null) {
@@ -151,14 +152,14 @@ public class MemorySpace {
 	
 		// If no block with the given address was found in allocatedList, return (or handle error)
 		if (blockToFree == null) {
-			throw new IllegalArgumentException("Memory block not found in the allocated list");
+			throw new IllegalArgumentException("index must be between 0 and size");
 		}
 	
 		// Remove the block from the allocatedList
-		allocatedList.remove(blockToFree.block);  // Ensure this remove method works as expected
+		allocatedList.remove(blockToFree.block);  
 	
 		// Add the block to the freeList
-		freeList.addLast(blockToFree.block);  // Ensure addLast method is defined in freeList
+		freeList.addLast(blockToFree.block);  
 	}
 	
 	

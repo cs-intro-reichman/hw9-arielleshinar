@@ -140,6 +140,9 @@ public class MemorySpace {
 		Node currentNode = allocatedList.getFirst();  
 		Node blockToFree = null;
 
+		if (freeList == null){
+			throw new IllegalArgumentException("index must be between 0 and size");
+		}
 	
 		// Traverse the allocated list to find the block
 		while (currentNode != null) {
@@ -149,11 +152,11 @@ public class MemorySpace {
 			}
 			currentNode = currentNode.next;  // Move to the next node in the list
 		}
-	
+		
 		// If no block with the given address was found in allocatedList, return (or handle error)
-		if (blockToFree == null) {
-			throw new IllegalArgumentException("index must be between 0 and size");
-		}
+		//if (blockToFree == null) {
+		//	throw new IllegalArgumentException("index must be between 0 and size");
+		//}
 	
 		// Remove the block from the allocatedList
 		allocatedList.remove(blockToFree.block);  

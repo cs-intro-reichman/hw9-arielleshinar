@@ -113,7 +113,9 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		
-
+	if (freeList.getSize() == 0) {  
+			throw new IllegalArgumentException("index must be between 0 and size");
+		}
   // Find the block in the allocatedList with the given base address
   Node currentNode = allocatedList.getFirst();  
   Node blockToFree = null;
@@ -133,13 +135,13 @@ public class MemorySpace {
   }
 
   // Check if the block is already in the freeList
-  currentNode = freeList.getFirst();
-  while (currentNode != null) {
-	  if (currentNode.block.baseAddress == address) {
-		  return;  // Block is already in the free list, no need to free it again
-	  }
-	  currentNode = currentNode.next;
-  }
+  //currentNode = freeList.getFirst();
+  //while (currentNode != null) {
+	//  if (currentNode.block.baseAddress == address) {
+	//	  return;  // Block is already in the free list, no need to free it again
+	  //}
+	 // currentNode = currentNode.next;
+  //}
 
   // Remove the block from the allocatedList
   allocatedList.remove(blockToFree.block);  

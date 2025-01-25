@@ -112,37 +112,10 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		/*  // Find the block in the allocatedList with the given base address
-		 Node currentNode = allocatedList.getFirst(); 
-		 Node blockToFree = null;
-	 
-		 // Traverse the allocated list to find the block
-		 while (currentNode != null) {
-			 if (currentNode.block.baseAddress == address) {
-				 blockToFree = currentNode;  // Found the block
-				 break;
-			 }
-			 currentNode = currentNode.next;  // Move to the next node in the list
-		 }
-	 
-		 // If no block with the given address was found in allocatedList, return (or handle error)
-		 if (blockToFree == null) {
-			 return;  // Or you can throw an exception if this is an error case
-		 }
-		 // Remove the block from the allocatedList
-		 allocatedList.remove(blockToFree.block);
-
-		 //  Add the block to the freeList
-		 freeList.addLast(blockToFree.block);  
-	 
-		}*/
+		
 		// Find the block in the allocatedList with the given base address
 		Node currentNode = allocatedList.getFirst();  
 		Node blockToFree = null;
-
-		if (freeList == null){
-			throw new IllegalArgumentException("index must be between 0 and size");
-		}
 	
 		// Traverse the allocated list to find the block
 		while (currentNode != null) {
@@ -152,11 +125,20 @@ public class MemorySpace {
 			}
 			currentNode = currentNode.next;  // Move to the next node in the list
 		}
-		
-		// If no block with the given address was found in allocatedList, return (or handle error)
-		//if (blockToFree == null) {
-		//	throw new IllegalArgumentException("index must be between 0 and size");
-		//}
+	
+		// If no block with the given address was found in allocatedList, just return (no-op)
+		if (blockToFree == null) {
+			return;  // Ignore the invalid free request, no exception
+		}
+	
+		// Check if the block is already in the freeList
+		currentNode = freeList.getFirst();
+		while (currentNode != null) {
+			if (currentNode.block.baseAddress == address) {
+				return;  // Block is already in the free list, no need to free it again
+			}
+			currentNode = currentNode.next;
+		}
 	
 		// Remove the block from the allocatedList
 		allocatedList.remove(blockToFree.block);  

@@ -113,6 +113,11 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		
+		// If the freeList is empty, throw an exception
+		if (freeList.getSize() == 0) {
+			throw new IllegalStateException("index must be between 0 and size");
+		}
+	
 		// Find the block in the allocatedList with the given base address
 		Node currentNode = allocatedList.getFirst();  
 		Node blockToFree = null;
@@ -146,6 +151,7 @@ public class MemorySpace {
 		// Add the block to the freeList
 		freeList.addLast(blockToFree.block);  
 	}
+	
 	
 	
 	/**
